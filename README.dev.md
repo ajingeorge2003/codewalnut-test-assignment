@@ -3,18 +3,18 @@
 ## Overview
 This is a **complete, working starter project** for the Flight Explorer assignment. All core components are in place, build passes, and the dev server works with no console errors.
 
-**Status**: ✅ **READY TO EXTEND** — All infrastructure is working; you can now add features and expand tests.
+**Status**: [READY] **READY TO EXTEND** — All infrastructure is working; you can now add features and expand tests.
 
 ## What's Included
-- ✅ Vite + React 18 + TypeScript config (fully working)
-- ✅ Tailwind CSS v4 integration (fixed and tested)
-- ✅ Core components: SearchForm, FlightCard, FlightDetails
-- ✅ Pages: Home (search + results), WatchlistPage
-- ✅ WatchlistContext with localStorage persistence
-- ✅ flightService with API wrapper + mock fallback
-- ✅ 3 Vitest test suites (SearchForm, Watchlist, FlightCard)
-- ✅ Production build: succeeds, ~152 KB JS + 12.6 KB CSS
-- ✅ Dev server: runs with HMR, no console errors
+- [DONE] Vite + React 18 + TypeScript config (fully working)
+- [DONE] Tailwind CSS v4 integration (fixed and tested)
+- [DONE] Core components: SearchForm, FlightCard, FlightDetails
+- [DONE] Pages: Home (search + results), WatchlistPage
+- [DONE] WatchlistContext with localStorage persistence
+- [DONE] flightService with API wrapper + mock fallback
+- [DONE] 3 Vitest test suites (SearchForm, Watchlist, FlightCard)
+- [DONE] Production build: succeeds, ~152 KB JS + 12.6 KB CSS
+- [DONE] Dev server: runs with HMR, no console errors
 
 ## Quick Start
 
@@ -77,7 +77,7 @@ The project uses environment variables for configuration. These are loaded from 
 
 ---
 
-## Issues Fixed ✅
+## Issues Fixed [DONE]
 
 ### 1. Tailwind CSS v4 Compatibility
 **Problem**: Build failed — old PostCSS config didn't work with Tailwind v4.  
@@ -85,17 +85,17 @@ The project uses environment variables for configuration. These are loaded from 
 - Installed `@tailwindcss/postcss` package
 - Updated `postcss.config.cjs` to reference new plugin
 - Changed `src/main.css` from `@tailwind` directives to `@import "tailwindcss"`
-- Result: ✅ Build now succeeds
+- Result: [DONE] Build now succeeds
 
 ### 2. Vite ESM Plugin Loading  
 **Problem**: esbuild couldn't load `@vitejs/plugin-react` as ESM.  
 **Solution**: Modified `vite.config.ts` to dynamically import the React plugin.  
-**Result**: ✅ Config loads without errors
+**Result**: [DONE] Config loads without errors
 
 ### 3. TypeScript Module Resolution
 **Problem**: Editor showed false "Cannot find module './App'" errors.  
 **Solution**: Full `npm install` ensures all dependencies and types are available.  
-**Result**: ✅ All imports resolve correctly
+**Result**: [DONE] All imports resolve correctly
 
 ---
 
@@ -148,7 +148,7 @@ src/
 
 ## Build Status
 
-### ✅ Production Build Successful
+### [DONE] Production Build Successful
 ```
 ✓ 43 modules transformed
 dist/index.html                   0.42 kB │ gzip: 0.28 kB
@@ -157,12 +157,12 @@ dist/assets/index-DePIS8Dg.js   152.22 kB │ gzip: 49.03 kB
 ✓ built in 3.60s
 ```
 
-### ✅ Dev Server Working
+### [DONE] Dev Server Working
 - Runs at `localhost:5173`
 - Hot Module Replacement enabled
 - No console errors or warnings
 
-### ✅ Tests Ready
+### [DONE] Tests Ready
 - 3 test suites configured
 - Vitest + Testing Library
 - jsdom environment
@@ -218,8 +218,8 @@ Follow conventional commits:
 
 ## Key Statistics
 
-- **Node version**: v22.17.1 ✅
-- **npm version**: 10.9.2 ✅
+- **Node version**: v22.17.1 [VERIFIED]
+- **npm version**: 10.9.2 [VERIFIED]
 - **TypeScript**: v5.1.6
 - **React**: 18.2.0
 - **Vite**: 5.4.21

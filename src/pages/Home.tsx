@@ -16,10 +16,10 @@ export default function Home() {
     setLoading(true)
     setError(null)
     setResults([])
-    console.log('🔍 Search params:', params)
+    console.log('[SEARCH] Search params:', params)
     try {
       const data = await fetchFlights()
-      console.log('📦 Fetched data:', data)
+      console.log('[API] Fetched data:', data)
       
       if (!data || !data.flights || data.flights.length === 0) {
         setError('No flights available')
@@ -39,7 +39,7 @@ export default function Home() {
         filtered = filtered.filter((f: any) => f.destination?.code?.toLowerCase() === params.destination!.toLowerCase())
       }
       
-      console.log(`✅ Filtered results: ${filtered.length} from ${data.flights.length}`)
+      console.log(`[RESULTS] Filtered results: ${filtered.length} from ${data.flights.length}`)
       
       if (filtered.length === 0) {
         setError('No flights match your search criteria')
@@ -48,7 +48,7 @@ export default function Home() {
       }
     } catch (err: any) {
       const errMsg = err?.message || 'Failed to fetch flights'
-      console.error('❌ Error:', errMsg)
+      console.error('[ERROR]:', errMsg)
       setError(errMsg)
     } finally {
       setLoading(false)

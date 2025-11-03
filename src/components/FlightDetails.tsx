@@ -135,7 +135,7 @@ export default function FlightDetails({ flight }: Props) {
 
       {/* Note */}
       <div className="p-3 bg-amber-50 dark:bg-amber-900 rounded-lg border border-amber-200 dark:border-amber-700 text-xs text-amber-800 dark:text-amber-200">
-        ℹ️ Information is based on the most recent data from the flight system.
+        [INFO] Information is based on the most recent data from the flight system.
       </div>
     </div>
   )

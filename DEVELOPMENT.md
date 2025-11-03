@@ -1,4 +1,4 @@
-# 🚀 Flight Explorer - Development Guide
+# [ROCKET] Flight Explorer - Development Guide
 
 ## Project Overview
 
@@ -83,11 +83,11 @@ https://flight-explorer-api.codewalnut.com/api/flights
 ```
 
 ### Features
-- ✅ 10-second timeout protection
-- ✅ Abort controller for cancellation
-- ✅ Debug logging (`📡`, `✅`, `❌` emojis)
-- ✅ Error handling with user-friendly messages
-- 🔒 **LOCKED** - No modifications allowed
+- [DONE] 10-second timeout protection
+- [DONE] Abort controller for cancellation
+- [DONE] Debug logging ([API], [SUCCESS], [ERROR] tags)
+- [DONE] Error handling with user-friendly messages
+- [LOCKED] **LOCKED** - No modifications allowed
 
 ### Usage Example
 ```typescript
@@ -237,7 +237,7 @@ describe('Component', () => {
 **Solution**: Using dynamic import in vite.config.ts
 
 ### Issue: API returns no data
-**Debug**: Check browser console for API logs (`📡`, `✅`, `❌`)
+**Debug**: Check browser console for API logs ([API], [SUCCESS], [ERROR])
 
 ### Issue: Dark mode not working
 **Solution**: Ensure `prefers-color-scheme` is supported or add `dark:` classes
@@ -322,4 +322,4 @@ Already included in FlightCard, Home, and flightService
 ---
 
 **Last Updated**: December 2024  
-**Status**: ✅ Production Ready
+**Status**: [READY] Production Ready

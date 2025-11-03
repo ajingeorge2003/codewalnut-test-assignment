@@ -1,6 +1,6 @@
 export type ApiFlight = any
 
-// 🔒 API LOCKED - DO NOT MODIFY THIS SECTION
+// API LOCKED - DO NOT MODIFY THIS SECTION
 // The API endpoint is working and verified.
 // Configuration is loaded from environment variables (.env file)
 const BASE = import.meta.env.VITE_API_BASE_URL || 'https://flight-explorer-api.codewalnut.com/api'
@@ -14,7 +14,7 @@ const DEBUG = true // set to false to disable debug logs
  */
 export async function fetchFlights(): Promise<{ flights: ApiFlight[] }> {
   try {
-    if (DEBUG) console.log('📡 Fetching flights from:', `${BASE}/flights`)
+    if (DEBUG) console.log('[API] Fetching flights from:', `${BASE}/flights`)
     
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), TIMEOUT) // configurable timeout
@@ -33,12 +33,12 @@ export async function fetchFlights(): Promise<{ flights: ApiFlight[] }> {
     }
     
     const data = await res.json()
-    if (DEBUG) console.log('✅ API Success:', data)
+    if (DEBUG) console.log('[SUCCESS] API Response:', data)
     return data
     
   } catch (err: any) {
     const errMsg = err?.message || 'Unknown error'
-    console.error('❌ API ERROR:', errMsg)
+    console.error('[ERROR] API call failed:', errMsg)
     throw err // Re-throw to prevent fallback
   }
 }

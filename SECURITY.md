@@ -1,18 +1,18 @@
-# 🔒 Security & Best Practices Guide
+# [LOCK] Security & Best Practices Guide
 
 ## Overview
 This document outlines security practices implemented in the Flight Explorer project.
 
 ## Environment Variables & Sensitive Data
 
-### ✅ What We Do
+### [DONE] What We Do
 
 1. **API Endpoints in Environment Variables**
    ```typescript
-   // ❌ WRONG - Never do this:
+   // [WRONG] WRONG - Never do this:
    const API_URL = 'https://api.example.com/secret-key-123'
    
-   // ✅ CORRECT:
+   // [CORRECT] CORRECT:
    const API_URL = import.meta.env.VITE_API_BASE_URL
    ```
 
@@ -23,20 +23,20 @@ This document outlines security practices implemented in the Flight Explorer pro
    - `.env.staging` — Staging settings (NOT committed)
 
 3. **Never Commit Sensitive Data**
-   - API keys ❌
-   - Passwords ❌
-   - Secret tokens ❌
-   - Database credentials ❌
-   - Private URLs ❌
+   - API keys [FORBIDDEN]
+   - Passwords [FORBIDDEN]
+   - Secret tokens [FORBIDDEN]
+   - Database credentials [FORBIDDEN]
+   - Private URLs [FORBIDDEN]
 
 ### Files in This Project
 
 ```
-├── .env                 # ❌ IGNORED - Local config (not in git)
-├── .env.example         # ✅ COMMITTED - Template for developers
-├── .env.production      # ❌ IGNORED - Production secrets
-├── .gitignore          # ✅ COMMITTED - Specifies ignored files
-└── src/vite-env.d.ts   # ✅ COMMITTED - Type definitions for env vars
+├── .env                 # [IGNORED] IGNORED - Local config (not in git)
+├── .env.example         # [COMMITTED] COMMITTED - Template for developers
+├── .env.production      # [IGNORED] IGNORED - Production secrets
+├── .gitignore          # [COMMITTED] COMMITTED - Specifies ignored files
+└── src/vite-env.d.ts   # [COMMITTED] COMMITTED - Type definitions for env vars
 ```
 
 ## .gitignore Configuration
@@ -83,7 +83,7 @@ git check-ignore -v .env.example
 ### In TypeScript Code
 
 ```typescript
-// ✅ CORRECT - Uses type-safe environment variables
+// [CORRECT] CORRECT - Uses type-safe environment variables
 const API_BASE = import.meta.env.VITE_API_BASE_URL
 const TIMEOUT = import.meta.env.VITE_API_TIMEOUT
 const ENV = import.meta.env.VITE_APP_ENV
@@ -162,10 +162,10 @@ interface ImportMetaEnv {
 ### Access in Code
 
 ```typescript
-// ✅ Type-safe with autocomplete
+// [SAFE] Type-safe with autocomplete
 import.meta.env.VITE_API_BASE_URL
 
-// ❌ Not type-safe, avoid
+// [UNSAFE] Not type-safe, avoid
 process.env.VITE_API_BASE_URL  // undefined in browser
 ```
 
@@ -173,28 +173,28 @@ process.env.VITE_API_BASE_URL  // undefined in browser
 
 ### Before Deployment
 
-- ✅ No hardcoded API keys in code
-- ✅ No passwords in comments
-- ✅ No secrets in git history
-- ✅ `.env` files in `.gitignore`
-- ✅ `.env.example` shows required variables
-- ✅ All team members have `.env` setup
-- ✅ Production uses separate credentials
-- ✅ Type definitions for all env vars
-- ✅ Error messages don't leak sensitive info
-- ✅ Build doesn't include `.env` files
+- [CHECK] No hardcoded API keys in code
+- [CHECK] No passwords in comments
+- [CHECK] No secrets in git history
+- [CHECK] `.env` files in `.gitignore`
+- [CHECK] `.env.example` shows required variables
+- [CHECK] All team members have `.env` setup
+- [CHECK] Production uses separate credentials
+- [CHECK] Type definitions for all env vars
+- [CHECK] Error messages don't leak sensitive info
+- [CHECK] Build doesn't include `.env` files
 
 ### After Deployment
 
-- ✅ Verify secrets not in built files: `grep -r "secret" dist/`
-- ✅ Check git history: `git log -p --all | grep -i "password"`
-- ✅ Monitor error logs for leaked credentials
-- ✅ Rotate secrets periodically
-- ✅ Use environment-specific credentials
+- [CHECK] Verify secrets not in built files: `grep -r "secret" dist/`
+- [CHECK] Check git history: `git log -p --all | grep -i "password"`
+- [CHECK] Monitor error logs for leaked credentials
+- [CHECK] Rotate secrets periodically
+- [CHECK] Use environment-specific credentials
 
 ## Common Mistakes to Avoid
 
-### ❌ Wrong
+### [WRONG] Wrong
 
 ```typescript
 // Hardcoded in code
@@ -213,7 +213,7 @@ console.log('API Response:', {
 })
 ```
 
-### ✅ Correct
+### [CORRECT] Correct
 
 ```typescript
 // Use environment variable
@@ -250,11 +250,11 @@ console.log('API Request:', {
 
 ---
 
-**Status**: ✅ Properly configured with best practices
+**Status**: [SECURE] Properly configured with best practices
 
 **Key Points**:
-- 🔒 All environment-specific config in `.env`
-- 🙅 Sensitive data never committed
-- ✅ Type-safe environment variables
-- 🛡️ `.gitignore` prevents accidental commits
-- 📋 `.env.example` documents required vars
+- [LOCK] All environment-specific config in `.env`
+- [BLOCKED] Sensitive data never committed
+- [DONE] Type-safe environment variables
+- [PROTECTED] `.gitignore` prevents accidental commits
+- [DOCUMENTED] `.env.example` documents required vars
