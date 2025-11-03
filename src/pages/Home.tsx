@@ -17,6 +17,7 @@ export default function Home({ isDark = false }: HomeProps) {
   const [error, setError] = useState<string | null>(null)
   const [selected, setSelected] = useState<any | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const [hasSearched, setHasSearched] = useState(false)
   const { toggle, watchlist } = useWatchlist()
 
   async function onSearch(params: { origin?: string; destination?: string; flightNumber?: string }) {
@@ -25,6 +26,7 @@ export default function Home({ isDark = false }: HomeProps) {
     setResults([])
     setCurrentPage(1)
     setSelected(null)
+    setHasSearched(true)
     console.log('[SEARCH] Search params:', params)
     try {
       const data = await fetchFlights()
@@ -138,11 +140,21 @@ export default function Home({ isDark = false }: HomeProps) {
                 </div>
               )}
 
-              {/* Empty State */}
-              {!loading && !error && results.length === 0 && (
-                <div className={`p-3 rounded-lg border-2 border-dashed ${isDark ? 'bg-[#1A1A2E] border-[#505081]' : 'bg-gradient-to-r from-[#BDDFC]/20 to-[#88BDF2]/15 border-[#BDDFC]/50'} text-center`}>
-                  <div className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>No flights found</div>
-                  <div className={`text-xs mt-1 ${isDark ? 'text-[#505081]' : 'text-[#88BDF2]/60'}`}>Try a different search or click "View All Flights"</div>
+              {/* Initial State - Before Any Search */}
+              {!loading && !error && !hasSearched && results.length === 0 && (
+                <div className={`p-8 rounded-lg border-2 border-dashed ${isDark ? 'bg-[#1A1A2E] border-[#505081]' : 'bg-gradient-to-r from-[#BDDFC]/20 to-[#88BDF2]/15 border-[#BDDFC]/50'} text-center`}>
+                  <div className={`text-4xl mb-3 ${isDark ? 'text-[#505081]' : 'text-[#BDDFC]/40'}`}>✈️</div>
+                  <div className={`text-sm font-semibold ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>Start Your Flight Search</div>
+                  <div className={`text-xs mt-2 ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>Enter your departure airport, arrival airport, or airline code above to find flights</div>
+                </div>
+              )}
+
+              {/* Empty Search Result State - After Search but No Results */}
+              {!loading && hasSearched && results.length === 0 && !error && (
+                <div className={`p-8 rounded-lg border-2 border-dashed ${isDark ? 'bg-[#3E2D5C] border-[#505081]' : 'bg-red-50 border-red-300'} text-center`}>
+                  <div className={`text-2xl mb-3 ${isDark ? 'text-[#88BDF2]' : 'text-red-400'}`}>✗</div>
+                  <div className={`text-sm font-semibold ${isDark ? 'text-[#BDDFC]' : 'text-red-700'}`}>No Flights Found</div>
+                  <div className={`text-xs mt-2 ${isDark ? 'text-[#8686AC]' : 'text-red-600'}`}>Try searching with different criteria or check the spelling</div>
                 </div>
               )}
 
