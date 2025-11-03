@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { FaPlane, FaHeart, FaSun, FaMoon } from 'react-icons/fa'
+import HomePage from './pages/HomePage'
 import Home from './pages/Home'
 import WatchlistPage from './pages/WatchlistPage'
 import { WatchlistProvider, useWatchlist } from './context/WatchlistContext'
 
 function AppContent() {
-  const [view, setView] = useState<'home' | 'watchlist'>('home')
+  const [view, setView] = useState<'landing' | 'search' | 'watchlist'>('landing')
   const [isDark, setIsDark] = useState(false)
   const { watchlist } = useWatchlist()
 
@@ -88,9 +89,23 @@ function AppContent() {
             {/* Navigation and Theme Toggle */}
             <nav className="flex items-center gap-3">
               <button
-                onClick={() => setView('home')}
+                onClick={() => setView('landing')}
                 className={`px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm ${
-                  view === 'home'
+                  view === 'landing'
+                    ? isDark
+                      ? 'bg-[#505081] text-[#E8E8F0] shadow-md'
+                      : 'bg-gradient-to-r from-[#6A89A7] to-[#88BDF2] text-white shadow-md'
+                    : isDark
+                      ? 'bg-[#1A1A2E] text-[#8686AC] hover:bg-[#272757]'
+                      : 'bg-[#BDDFC]/40 text-[#384959] hover:bg-[#BDDFC]/60 border border-[#BDDFC]/50'
+                }`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => setView('search')}
+                className={`px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm ${
+                  view === 'search'
                     ? isDark
                       ? 'bg-[#505081] text-[#E8E8F0] shadow-md'
                       : 'bg-gradient-to-r from-[#6A89A7] to-[#88BDF2] text-white shadow-md'
@@ -139,7 +154,9 @@ function AppContent() {
 
       {/* Main Content */}
       <main className={`relative max-w-7xl mx-auto px-4 py-6 ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>
-        {view === 'home' ? <Home isDark={isDark} /> : <WatchlistPage isDark={isDark} />}
+        {view === 'landing' && <HomePage isDark={isDark} onNavigateSearch={() => setView('search')} onNavigateWatchlist={() => setView('watchlist')} />}
+        {view === 'search' && <Home isDark={isDark} />}
+        {view === 'watchlist' && <WatchlistPage isDark={isDark} />}
       </main>
 
       {/* Footer */}
