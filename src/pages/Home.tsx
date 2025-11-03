@@ -34,20 +34,39 @@ export default function Home() {
       // simple client-side filter - show all flights if no search params
       let filtered = data.flights
       
-      if (params.flightNumber) {
-        filtered = filtered.filter((f: any) => f.flightNumber?.toLowerCase()?.includes(params.flightNumber!.toLowerCase()))
+      if (params.flightNumber && params.flightNumber.trim()) {
+        const flightSearch = params.flightNumber.trim().toUpperCase()
+        console.log('[SEARCH] Looking for flight containing:', flightSearch)
+        filtered = filtered.filter((f: any) => {
+          const flightNum = (f.flightNumber || f.flight_number || f.number || '')?.toString().toUpperCase() || ''
+          const match = flightNum.includes(flightSearch)
+          console.log('[DEBUG] Flight:', flightNum, '| Search:', flightSearch, '| Match:', match)
+          return match
+        })
+        console.log('[SEARCH] After flight number filter: found', filtered.length, 'flights')
+        if (filtered.length > 0) {
+          console.log('[SUCCESS] Matching flights:', filtered.map((f: any) => f.flightNumber))
+        }
       }
-      if (params.origin) {
-        filtered = filtered.filter((f: any) => f.origin?.code?.toLowerCase() === params.origin!.toLowerCase())
+      if (params.origin && params.origin.trim()) {
+        const originCode = params.origin.trim().split(' ')[0].toUpperCase()
+        filtered = filtered.filter((f: any) => f.origin?.code?.toUpperCase() === originCode)
       }
-      if (params.destination) {
-        filtered = filtered.filter((f: any) => f.destination?.code?.toLowerCase() === params.destination!.toLowerCase())
+      if (params.destination && params.destination.trim()) {
+        const destCode = params.destination.trim().split(' ')[0].toUpperCase()
+        filtered = filtered.filter((f: any) => f.destination?.code?.toUpperCase() === destCode)
       }
       
       console.log(`[RESULTS] Filtered results: ${filtered.length} from ${data.flights.length}`)
       
       if (filtered.length === 0) {
-        setError('No flights match your search criteria')
+        // Provide more helpful error message
+        const searchTerms = []
+        if (params.flightNumber) searchTerms.push(`flight ${params.flightNumber}`)
+        if (params.origin) searchTerms.push(`from ${params.origin.split(' ')[0]}`)
+        if (params.destination) searchTerms.push(`to ${params.destination.split(' ')[0]}`)
+        
+        setError(`No flights found matching: ${searchTerms.join(', ')}. Try searching with different criteria.`)
       } else {
         setResults(filtered)
       }
@@ -71,65 +90,65 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-3">
       {/* Search Section */}
-      <section className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Search Flights</h2>
+      <section className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <h2 className="text-base font-bold text-gray-900 dark:text-white mb-3">Search Flights</h2>
         <SearchForm onSearch={onSearch} />
       </section>
 
       {/* Results and Details Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
         {/* Left: Flight List */}
         <div className="lg:col-span-3">
           <section>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-base font-bold text-gray-900 dark:text-white">
                 Flights
                 {!loading && results.length > 0 && (
-                  <span className="ml-2 text-lg font-normal text-blue-600">({results.length})</span>
+                  <span className="ml-2 text-xs font-normal text-blue-600">({results.length})</span>
                 )}
               </h2>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
               {/* Loading State */}
               {loading && (
-                <div className="space-y-4">
+                <div className="space-y-2">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="p-4 rounded-lg bg-gray-200 dark:bg-gray-700 h-32 animate-pulse"></div>
+                    <div key={i} className="p-3 rounded-lg bg-gray-200 dark:bg-gray-700 h-24 animate-pulse"></div>
                   ))}
                 </div>
               )}
 
               {/* Error State */}
               {error && !loading && (
-                <div className="p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg">
-                  <div className="text-red-800 dark:text-red-200 font-semibold">Error</div>
-                  <div className="text-red-700 dark:text-red-300 text-sm">{error}</div>
+                <div className="p-3 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg">
+                  <div className="text-red-800 dark:text-red-200 font-semibold text-xs">Error</div>
+                  <div className="text-red-700 dark:text-red-300 text-xs">{error}</div>
                 </div>
               )}
 
               {/* Empty State */}
               {!loading && !error && results.length === 0 && (
-                <div className="p-8 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center">
-                  <div className="text-gray-600 dark:text-gray-400">No flights found</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-500 mt-1">Try a different search or click "View All Flights"</div>
+                <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center">
+                  <div className="text-gray-600 dark:text-gray-400 text-xs">No flights found</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">Try a different search or click "View All Flights"</div>
                 </div>
               )}
 
               {/* Flight Results */}
               {!loading && paginatedResults.length > 0 && (
                 <>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {paginatedResults.map((f) => (
                       <div
                         key={f.id}
                         onClick={() => setSelected(f)}
                         className={`cursor-pointer transition-all ${
                           selected?.id === f.id
-                            ? 'ring-2 ring-blue-500 scale-105'
-                            : 'hover:scale-102'
+                            ? 'ring-2 ring-blue-500 scale-100'
+                            : 'hover:scale-101'
                         }`}
                       >
                         <FlightCard 
@@ -144,13 +163,13 @@ export default function Home() {
 
                   {/* Pagination Controls */}
                   {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-center gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                       <button
                         onClick={() => goToPage(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-3 py-2 text-sm rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className="px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
-                        Previous
+                        Prev
                       </button>
                       
                       <div className="flex gap-1">
@@ -158,7 +177,7 @@ export default function Home() {
                           <button
                             key={page}
                             onClick={() => goToPage(page)}
-                            className={`w-8 h-8 text-sm rounded transition-colors ${
+                            className={`w-7 h-7 text-xs rounded transition-colors ${
                               currentPage === page
                                 ? 'bg-blue-600 text-white'
                                 : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -172,7 +191,7 @@ export default function Home() {
                       <button
                         onClick={() => goToPage(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="px-3 py-2 text-sm rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className="px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
                         Next
                       </button>
@@ -180,8 +199,8 @@ export default function Home() {
                   )}
 
                   {/* Page Info */}
-                  <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-3">
-                    Page {currentPage} of {totalPages} | Showing {paginatedResults.length} of {results.length} flights
+                  <div className="text-center text-xs text-gray-600 dark:text-gray-400 mt-2">
+                    Page {currentPage}/{totalPages} • {paginatedResults.length}/{results.length}
                   </div>
                 </>
               )}
@@ -190,27 +209,28 @@ export default function Home() {
         </div>
 
         {/* Right: Flight Details - Compact Sidebar */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           {selected ? (
-            <section className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 sticky top-0 max-h-screen overflow-y-auto">
-              <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">Details</h3>
+            <section className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 sticky top-0 max-h-screen overflow-y-auto">
+              <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white truncate">Flight Info</h3>
                 <button 
                   onClick={() => setSelected(null)}
-                  className="flex-shrink-0 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className="flex-shrink-0 px-2 py-0.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
-                  Close
+                  ✕
                 </button>
               </div>
-              <div className="text-sm">
+              <div className="text-xs">
                 <FlightDetails flight={selected} />
               </div>
             </section>
           ) : (
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center">
-              <div className="text-2xl mb-2 text-gray-400">📋</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Select a flight</div>
-              <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">Click any flight to view details</div>
+            <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center h-24 flex items-center justify-center">
+              <div>
+                <div className="text-lg text-gray-400 mb-1">📋</div>
+                <div className="text-xs text-gray-600 dark:text-gray-400 font-semibold">Select flight</div>
+              </div>
             </div>
           )}
         </div>

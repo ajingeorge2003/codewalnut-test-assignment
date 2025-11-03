@@ -12,7 +12,7 @@ function AppContent() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-gray-900 dark:text-gray-100">
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-md border-b border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-4 py-4">
+        <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Logo/Title */}
             <div className="flex items-center gap-3">
@@ -57,13 +57,13 @@ function AppContent() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-6">
         {view === 'home' ? <Home /> : <WatchlistPage />}
       </main>
 
       {/* Footer */}
       <footer className="mt-12 py-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-600 dark:text-gray-400">
+        <div className="max-w-7xl mx-auto px-4 text-center text-sm text-gray-600 dark:text-gray-400">
           <p>Flight Explorer © 2024 • All flight data is for demonstration purposes</p>
         </div>
       </footer>

@@ -28,44 +28,44 @@ export default function FlightCard({ flight, onSelect, onToggleWatch, isWatched 
   }
 
   return (
-    <div className="flight-card animate-fade-in p-4 rounded-lg shadow-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-3 flex-1">
-          <FaPlane className="text-blue-600 text-xl" />
+    <div className="flight-card animate-fade-in p-3 rounded-lg shadow-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+      <div className="flex items-start justify-between mb-2">
+        <div className="flex items-center gap-2 flex-1">
+          <FaPlane className="text-blue-600 text-lg" />
           <div>
-            <div className="font-bold text-lg text-gray-900 dark:text-white">{flight.flightNumber}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">{flight.airline}</div>
+            <div className="font-bold text-base text-gray-900 dark:text-white">{flight.flightNumber}</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">{flight.airline}</div>
           </div>
         </div>
-        <div className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${status.color}`}>
-          <StatusIcon size={14} />
+        <div className={`px-2 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1 ${status.color}`}>
+          <StatusIcon size={12} />
           {status.label}
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="grid grid-cols-3 gap-2 mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
         {/* From */}
         <div>
           <div className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">From</div>
-          <div className="font-bold text-lg text-gray-900 dark:text-white">{flight.origin?.code || '—'}</div>
+          <div className="font-bold text-base text-gray-900 dark:text-white">{flight.origin?.code || '—'}</div>
           <div className="text-xs text-gray-600 dark:text-gray-400">{flight.origin?.city || ''}</div>
         </div>
 
         {/* Arrow & Duration */}
         <div className="flex flex-col items-center justify-center">
-          <FaPlane className="text-gray-400 rotate-90 mb-1" />
+          <FaPlane className="text-gray-400 rotate-90 mb-0.5 text-sm" />
           <div className="text-xs text-gray-500">{flight.duration || '—'}</div>
         </div>
 
         {/* To */}
         <div>
           <div className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">To</div>
-          <div className="font-bold text-lg text-gray-900 dark:text-white">{flight.destination?.code || '—'}</div>
+          <div className="font-bold text-base text-gray-900 dark:text-white">{flight.destination?.code || '—'}</div>
           <div className="text-xs text-gray-600 dark:text-gray-400">{flight.destination?.city || ''}</div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+      <div className="grid grid-cols-2 gap-2 mb-2 text-xs">
         <div>
           <div className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Departure</div>
           <div className="font-semibold text-gray-900 dark:text-white">{formatTime(flight.departure?.scheduled)}</div>
@@ -85,19 +85,19 @@ export default function FlightCard({ flight, onSelect, onToggleWatch, isWatched 
       <div className="flex gap-2">
         <button
           onClick={() => onSelect?.(flight)}
-          className="flex-1 px-3 py-2 rounded border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 text-sm font-semibold transition-colors"
+          className="flex-1 px-2 py-1 rounded border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 text-xs font-semibold transition-colors"
         >
           Details
         </button>
         <button
           onClick={() => onToggleWatch?.(flight)}
-          className={`flex-1 px-3 py-2 rounded text-sm font-semibold transition-colors flex items-center justify-center gap-1 ${
+          className={`flex-1 px-2 py-1 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1 ${
             isWatched
               ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600'
           }`}
         >
-          {isWatched ? <FaHeart size={14} /> : <FaRegHeart size={14} />}
+          {isWatched ? <FaHeart size={12} /> : <FaRegHeart size={12} />}
           {isWatched ? 'Watched' : 'Watch'}
         </button>
       </div>
