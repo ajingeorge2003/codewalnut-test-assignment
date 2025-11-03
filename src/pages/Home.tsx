@@ -35,15 +35,17 @@ export default function Home() {
       let filtered = data.flights
       
       if (params.flightNumber && params.flightNumber.trim()) {
-        const flightSearch = params.flightNumber.trim().toUpperCase()
-        console.log('[SEARCH] Looking for flight containing:', flightSearch)
+        const airlineSearch = params.flightNumber.trim().toUpperCase()
+        console.log('[SEARCH] Looking for airline:', airlineSearch)
         filtered = filtered.filter((f: any) => {
+          // Extract airline code from flight number (first 2 letters usually)
           const flightNum = (f.flightNumber || f.flight_number || f.number || '')?.toString().toUpperCase() || ''
-          const match = flightNum.includes(flightSearch)
-          console.log('[DEBUG] Flight:', flightNum, '| Search:', flightSearch, '| Match:', match)
+          const airlineCode = flightNum.substring(0, 2)
+          const match = airlineCode === airlineSearch || flightNum.startsWith(airlineSearch)
+          console.log('[DEBUG] Flight:', flightNum, '| Airline Code:', airlineCode, '| Search:', airlineSearch, '| Match:', match)
           return match
         })
-        console.log('[SEARCH] After flight number filter: found', filtered.length, 'flights')
+        console.log('[SEARCH] After airline filter: found', filtered.length, 'flights')
         if (filtered.length > 0) {
           console.log('[SUCCESS] Matching flights:', filtered.map((f: any) => f.flightNumber))
         }
@@ -90,23 +92,23 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-3">
-      {/* Search Section */}
-      <section className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <h2 className="text-base font-bold text-gray-900 dark:text-white mb-3">Search Flights</h2>
+    <div className="space-y-4">
+      {/* Search Section with better styling */}
+      <section className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 p-6 rounded-xl shadow-lg border-0">
+        <h2 className="text-2xl font-bold text-white mb-4">Find Your Flight</h2>
         <SearchForm onSearch={onSearch} />
       </section>
 
-      {/* Results and Details Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
+      {/* Results Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* Left: Flight List */}
         <div className="lg:col-span-3">
           <section>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base font-bold text-gray-900 dark:text-white">
-                Flights
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Available Flights
                 {!loading && results.length > 0 && (
-                  <span className="ml-2 text-xs font-normal text-blue-600">({results.length})</span>
+                  <span className="ml-3 text-lg font-normal text-blue-600">({results.length})</span>
                 )}
               </h2>
             </div>
@@ -208,28 +210,28 @@ export default function Home() {
           </section>
         </div>
 
-        {/* Right: Flight Details - Compact Sidebar */}
+        {/* Right: Flight Details Panel */}
         <div className="lg:col-span-2">
           {selected ? (
-            <section className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 sticky top-0 max-h-screen overflow-y-auto">
-              <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-white truncate">Flight Info</h3>
+            <section className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 sticky top-0 max-h-screen overflow-y-auto">
+              <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">Flight Details</h3>
                 <button 
                   onClick={() => setSelected(null)}
-                  className="flex-shrink-0 px-2 py-0.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className="flex-shrink-0 px-2 py-0.5 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
                   ✕
                 </button>
               </div>
-              <div className="text-xs">
+              <div className="text-sm">
                 <FlightDetails flight={selected} />
               </div>
             </section>
           ) : (
-            <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center h-24 flex items-center justify-center">
+            <div className="bg-blue-50 dark:bg-gray-800 p-4 rounded-xl border-2 border-dashed border-blue-300 dark:border-gray-600 text-center h-28 flex items-center justify-center">
               <div>
-                <div className="text-lg text-gray-400 mb-1">📋</div>
-                <div className="text-xs text-gray-600 dark:text-gray-400 font-semibold">Select flight</div>
+                <div className="text-3xl text-blue-400 mb-2">✈️</div>
+                <div className="text-sm text-gray-700 dark:text-gray-300 font-semibold">Select a flight to view details</div>
               </div>
             </div>
           )}

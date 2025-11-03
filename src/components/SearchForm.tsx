@@ -56,21 +56,18 @@ export default function SearchForm({ onSearch }: Props) {
       .slice(0, 5)
   }
 
-  // Generate flight number suggestions
+  // Generate flight number/airline suggestions
   function getFlightNumberSuggestions(input: string): string[] {
     if (input.length < 1) return []
     const upper = input.toUpperCase()
 
-    // If input starts with airline code, suggest flight numbers
+    // Show matching airline codes first
     const matchingAirlines = FLIGHT_PREFIXES.filter((code) => code.startsWith(upper))
     if (matchingAirlines.length > 0) {
-      return matchingAirlines.map((code) => `${code}100`).slice(0, 5)
+      return matchingAirlines.map((code) => code).slice(0, 8)
     }
 
-    // Otherwise show matching airline codes
-    return FLIGHT_PREFIXES.filter((code) => code.startsWith(upper))
-      .map((code) => code)
-      .slice(0, 5)
+    return []
   }
 
   // Handle input changes
@@ -174,22 +171,23 @@ export default function SearchForm({ onSearch }: Props) {
   }
 
   return (
-    <form onSubmit={submit} className="space-y-3">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 relative">
+    <form onSubmit={submit} className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 relative">
         {/* Origin Input */}
         <div className="autocomplete-container relative z-30">
+          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">From</label>
           <input
             ref={originInputRef}
             aria-label="origin"
             value={origin}
             onChange={(e) => handleOriginChange(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, 'origin', suggestions.origin)}
-            placeholder="Origin (e.g. JFK)"
-            className="w-full p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Departure city"
+            className="w-full p-3 border-2 border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-0"
             autoComplete="off"
           />
           {suggestions.origin.length > 0 && (
-            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded shadow-lg">
+            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
               {suggestions.origin.map((s, i) => (
                 <div
                   key={i}
@@ -209,18 +207,19 @@ export default function SearchForm({ onSearch }: Props) {
 
         {/* Destination Input */}
         <div className="autocomplete-container relative z-30">
+          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">To</label>
           <input
             ref={destinationInputRef}
             aria-label="destination"
             value={destination}
             onChange={(e) => handleDestinationChange(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, 'destination', suggestions.destination)}
-            placeholder="Destination (e.g. LAX)"
-            className="w-full p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Arrival city"
+            className="w-full p-3 border-2 border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-0"
             autoComplete="off"
-          />
+            />
           {suggestions.destination.length > 0 && (
-            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded shadow-lg">
+            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
               {suggestions.destination.map((s, i) => (
                 <div
                   key={i}
@@ -238,20 +237,21 @@ export default function SearchForm({ onSearch }: Props) {
           )}
         </div>
 
-        {/* Flight Number Input */}
+        {/* Airline Input */}
         <div className="autocomplete-container relative z-30">
+          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Airline</label>
           <input
             ref={flightNumberInputRef}
             aria-label="flightNumber"
             value={flightNumber}
             onChange={(e) => handleFlightNumberChange(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, 'flightNumber', suggestions.flightNumber)}
-            placeholder="Flight number (optional)"
-            className="w-full p-2 border border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Airline code"
+            className="w-full p-3 border-2 border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-0"
             autoComplete="off"
           />
           {suggestions.flightNumber.length > 0 && (
-            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded shadow-lg">
+            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
               {suggestions.flightNumber.map((s, i) => (
                 <div
                   key={i}
@@ -268,15 +268,26 @@ export default function SearchForm({ onSearch }: Props) {
             </div>
           )}
         </div>
+
+        {/* Search Button */}
+        <div className="flex flex-col justify-end">
+          <button 
+            type="submit" 
+            className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+          >
+            Search Flights
+          </button>
+        </div>
       </div>
 
-      {error && <div className="text-sm text-red-600">{error}</div>}
+      {error && <div className="text-sm text-red-600 dark:text-red-400">{error}</div>}
 
-      <div className="flex gap-2">
-        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-          Search
-        </button>
-        <button type="button" onClick={clearAndSearch} className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600 transition-colors">
+      <div className="flex gap-2 pt-2">
+        <button 
+          type="button" 
+          onClick={clearAndSearch} 
+          className="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 font-semibold transition-colors"
+        >
           View All Flights
         </button>
       </div>

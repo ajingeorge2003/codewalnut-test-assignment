@@ -16,22 +16,22 @@ function AppContent() {
           <div className="flex items-center justify-between">
             {/* Logo/Title */}
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-600 rounded-lg">
-                <FaPlane className="text-white" size={24} />
+              <div className="p-2.5 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg">
+                <FaPlane className="text-white" size={26} />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Flight Explorer</h1>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Find and track flights</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Find and book flights</p>
               </div>
             </div>
 
             {/* Navigation */}
-            <nav className="flex items-center gap-2">
+            <nav className="flex items-center gap-3">
               <button
                 onClick={() => setView('home')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                className={`px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm ${
                   view === 'home'
-                    ? 'bg-blue-600 text-white shadow-lg'
+                    ? 'bg-blue-600 text-white shadow-md'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
@@ -39,16 +39,16 @@ function AppContent() {
               </button>
               <button
                 onClick={() => setView('watchlist')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+                className={`px-5 py-2.5 rounded-lg font-medium transition-all shadow-sm flex items-center gap-2 ${
                   view === 'watchlist'
-                    ? 'bg-red-600 text-white shadow-lg'
+                    ? 'bg-red-600 text-white shadow-md'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 <FaHeart size={16} />
                 <span>
-                  Watchlist
-                  {watchlist.length > 0 && <span className="ml-1 font-bold">({watchlist.length})</span>}
+                  Saved
+                  {watchlist.length > 0 && <span className="ml-1.5 font-bold bg-white dark:bg-gray-600 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full text-xs">({watchlist.length})</span>}
                 </span>
               </button>
             </nav>
