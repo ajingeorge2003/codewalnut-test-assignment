@@ -310,10 +310,10 @@ export default function SearchForm({ onSearch, isDark = false }: Props) {
         <div className="flex flex-col justify-end">
           <button 
             type="submit" 
-            className={`w-full px-6 py-3 font-semibold rounded-lg transition-all duration-200 shadow-md ${
+            className={`w-full px-6 py-3 font-semibold rounded-lg transition-all duration-300 shadow-md ${
               isDark
-                ? 'bg-[#505081] text-[#E8E8F0] hover:bg-[#8686AC] hover:shadow-lg hover:shadow-[#88BDF2]/30'
-                : 'bg-white text-[#6A89A7] hover:bg-white/95 hover:shadow-lg hover:shadow-[#6A89A7]/20 border-2 border-white font-bold active:scale-95'
+                ? 'bg-[#505081] text-[#E8E8F0] hover:bg-[#8686AC] hover:shadow-lg hover:shadow-[#88BDF2]/40 active:scale-95'
+                : 'bg-white text-[#6A89A7] hover:bg-[#BDDFC] hover:text-white hover:shadow-lg hover:shadow-[#6A89A7]/30 border-2 border-white font-bold active:scale-95'
             }`}
           >
             Search Flights
@@ -327,10 +327,10 @@ export default function SearchForm({ onSearch, isDark = false }: Props) {
         <button 
           type="button" 
           onClick={clearAndSearch} 
-          className={`px-4 py-2 border-2 font-semibold rounded-lg transition-all duration-200 ${
+          className={`px-4 py-2 border-2 font-semibold rounded-lg transition-all duration-300 ${
             isDark
-              ? 'border-[#505081] text-[#88BDF2] hover:bg-[#272757] hover:shadow-md hover:shadow-[#88BDF2]/20'
-              : 'border-white text-white hover:bg-white/30 hover:shadow-md hover:shadow-white/30 active:scale-95'
+              ? 'border-[#505081] text-[#88BDF2] hover:bg-[#505081]/50 hover:shadow-md hover:shadow-[#88BDF2]/30 active:scale-95'
+              : 'border-white text-white hover:bg-white hover:text-[#6A89A7] hover:shadow-md hover:shadow-white/50 active:scale-95'
           }`}
         >
           View All Flights
