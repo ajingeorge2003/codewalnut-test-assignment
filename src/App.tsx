@@ -36,7 +36,7 @@ function AppContent() {
   }
 
   return (
-    <div style={{backgroundColor: isDark ? '#0F0E47' : '#FFFFFF', color: isDark ? '#E8E8F0' : '#384959'}} className={`min-h-screen relative`}>
+    <div style={{backgroundColor: isDark ? '#0F0E47' : '#FFFFFF', color: isDark ? '#E8E8F0' : '#384959'}} className={`min-h-screen flex flex-col relative`}>
       {/* Background SVG Pattern */}
       <svg className="fixed inset-0 w-full h-full pointer-events-none" style={{opacity: isDark ? 0.03 : 0.05}} xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -50,6 +50,19 @@ function AppContent() {
         </defs>
         <rect width="100%" height="100%" fill="url(#airports)" />
       </svg>
+
+      {/* Background Image with 50% Opacity */}
+      <div 
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&h=1080&fit=crop")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          opacity: 0.5,
+          filter: isDark ? 'brightness(0.6)' : 'brightness(1)',
+        }}
+      ></div>
 
       {/* Animated background for light theme */}
       {!isDark && (
@@ -153,7 +166,7 @@ function AppContent() {
       </header>
 
       {/* Main Content */}
-      <main className={`relative max-w-7xl mx-auto px-4 py-6 ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>
+      <main className={`relative flex-grow max-w-7xl mx-auto px-4 py-6 w-full ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>
         {view === 'landing' && <HomePage isDark={isDark} onNavigateSearch={() => setView('search')} onNavigateWatchlist={() => setView('watchlist')} />}
         {view === 'search' && <Home isDark={isDark} />}
         {view === 'watchlist' && <WatchlistPage isDark={isDark} />}
