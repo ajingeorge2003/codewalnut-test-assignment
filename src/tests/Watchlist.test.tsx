@@ -1,5 +1,6 @@
 import React from 'react'
 import { renderHook, act } from '@testing-library/react'
+import { describe, test, expect } from 'vitest'
 import { WatchlistProvider, useWatchlist } from '../context/WatchlistContext'
 
 function wrapper({ children }: any) {
