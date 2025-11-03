@@ -59,8 +59,8 @@ function AppContent() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
-          opacity: 0.5,
-          filter: isDark ? 'brightness(0.6)' : 'brightness(1)',
+          opacity: 0.2,
+          filter: isDark ? 'brightness(0.5)' : 'brightness(1)',
         }}
       ></div>
 
