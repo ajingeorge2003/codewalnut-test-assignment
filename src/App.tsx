@@ -84,8 +84,11 @@ function AppContent() {
       <header className={`relative ${isDark ? 'bg-[#272757] border-[#505081]' : 'bg-white/80 backdrop-blur-sm border-[#BDDFC]/30'} shadow-md border-b`}>
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo/Title */}
-            <div className="flex items-center gap-3">
+            {/* Logo/Title - Clickable */}
+            <button
+              onClick={() => setView('landing')}
+              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+            >
               <div className={`p-2.5 rounded-lg ${
                 isDark 
                   ? 'bg-[#505081]' 
@@ -95,9 +98,9 @@ function AppContent() {
               </div>
               <div>
                 <h1 className={`text-2xl font-bold ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>Flight Explorer</h1>
-                <p className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>Find and book flights</p>
+                <p className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>Find flights</p>
               </div>
-            </div>
+            </button>
 
             {/* Navigation and Theme Toggle */}
             <nav className="flex items-center gap-3">
