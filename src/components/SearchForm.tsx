@@ -230,7 +230,7 @@ export default function SearchForm({ onSearch, isDark = false }: Props) {
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 relative">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 relative items-end">
         {/* Origin Input */}
         <div className="autocomplete-container relative z-30">
           <label className={`block text-xs font-semibold mb-1 ${isDark ? 'text-[#8686AC]' : 'text-white drop-shadow-sm'}`}>From</label>
