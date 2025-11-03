@@ -158,7 +158,64 @@ export default function SearchForm({ onSearch, isDark = false }: Props) {
   function submit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
-    onSearch({ origin: origin.trim() || undefined, destination: destination.trim() || undefined, flightNumber: flightNumber.trim() || undefined })
+
+    // Validation logic
+    const originTrimmed = origin.trim()
+    const destinationTrimmed = destination.trim()
+    const flightNumberTrimmed = flightNumber.trim()
+
+    // Check if at least one field is filled
+    if (!originTrimmed && !destinationTrimmed && !flightNumberTrimmed) {
+      setError('Please enter at least one search criterion (From, To, or Airline)')
+      return
+    }
+
+    // Validate origin if provided
+    if (originTrimmed) {
+      const originCode = originTrimmed.split(' ')[0].toUpperCase()
+      const isValidOrigin = AIRPORT_SUGGESTIONS.some(a => a.code === originCode)
+      if (!isValidOrigin) {
+        setError(`Invalid departure airport code: ${originCode}. Please select from the suggestions.`)
+        return
+      }
+    }
+
+    // Validate destination if provided
+    if (destinationTrimmed) {
+      const destinationCode = destinationTrimmed.split(' ')[0].toUpperCase()
+      const isValidDestination = AIRPORT_SUGGESTIONS.some(a => a.code === destinationCode)
+      if (!isValidDestination) {
+        setError(`Invalid arrival airport code: ${destinationCode}. Please select from the suggestions.`)
+        return
+      }
+    }
+
+    // Validate airline code if provided
+    if (flightNumberTrimmed) {
+      const airlineCode = flightNumberTrimmed.toUpperCase()
+      const isValidAirline = FLIGHT_PREFIXES.some(code => code === airlineCode || airlineCode.startsWith(code))
+      if (!isValidAirline) {
+        setError(`Invalid airline code: ${airlineCode}. Please select from the suggestions.`)
+        return
+      }
+    }
+
+    // Validate that origin and destination are different if both provided
+    if (originTrimmed && destinationTrimmed) {
+      const originCode = originTrimmed.split(' ')[0].toUpperCase()
+      const destinationCode = destinationTrimmed.split(' ')[0].toUpperCase()
+      if (originCode === destinationCode) {
+        setError('Departure and arrival airports must be different')
+        return
+      }
+    }
+
+    // All validations passed, proceed with search
+    onSearch({ 
+      origin: originTrimmed ? originTrimmed.split(' ')[0] : undefined, 
+      destination: destinationTrimmed ? destinationTrimmed.split(' ')[0] : undefined, 
+      flightNumber: flightNumberTrimmed 
+    })
   }
 
   function clearAndSearch() {
@@ -321,7 +378,15 @@ export default function SearchForm({ onSearch, isDark = false }: Props) {
         </div>
       </div>
 
-      {error && <div className={`text-sm ${isDark ? 'text-red-400' : 'text-white drop-shadow-sm'}`}>{error}</div>}
+      {error && (
+        <div className={`p-3 rounded-lg text-sm font-semibold border-2 ${
+          isDark
+            ? 'bg-red-900/20 border-red-600 text-red-400'
+            : 'bg-red-100/20 border-red-400 text-red-600 drop-shadow-sm'
+        }`}>
+          [ALERT] {error}
+        </div>
+      )}
 
       <div className="flex gap-2 pt-2">
         <button 
