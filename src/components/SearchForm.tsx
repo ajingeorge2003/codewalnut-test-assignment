@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 
 type Props = {
   onSearch: (params: { origin?: string; destination?: string; flightNumber?: string }) => void
+  isDark?: boolean
 }
 
 // Common airport codes for autocomplete
@@ -33,7 +34,7 @@ type AutocompleteState = {
   flightNumber: string[]
 }
 
-export default function SearchForm({ onSearch }: Props) {
+export default function SearchForm({ onSearch, isDark = false }: Props) {
   const [origin, setOrigin] = useState('')
   const [destination, setDestination] = useState('')
   const [flightNumber, setFlightNumber] = useState('')
@@ -175,7 +176,7 @@ export default function SearchForm({ onSearch }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 relative">
         {/* Origin Input */}
         <div className="autocomplete-container relative z-30">
-          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">From</label>
+          <label className={`block text-xs font-semibold mb-1 ${isDark ? 'text-[#8686AC]' : 'text-white drop-shadow-sm'}`}>From</label>
           <input
             ref={originInputRef}
             aria-label="origin"
@@ -183,19 +184,31 @@ export default function SearchForm({ onSearch }: Props) {
             onChange={(e) => handleOriginChange(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, 'origin', suggestions.origin)}
             placeholder="Departure city"
-            className="w-full p-3 border-2 border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-0"
+            className={`w-full p-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
+              isDark
+                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-300 focus:border-[#88BDF2]'
+                : 'bg-white/90 border-white/60 text-[#384959] placeholder-[#6A89A7] focus:border-white focus:bg-white'
+            }`}
             autoComplete="off"
           />
           {suggestions.origin.length > 0 && (
-            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
+            <div className={`absolute top-full left-0 z-50 w-full mt-1 rounded-lg shadow-lg border ${
+              isDark
+                ? 'bg-gray-700 border-gray-600'
+                : 'bg-white border-[#BDDFC]/40'
+            }`}>
               {suggestions.origin.map((s, i) => (
                 <div
                   key={i}
                   onClick={() => selectSuggestion('origin', s)}
                   className={`px-3 py-2 cursor-pointer text-sm transition-colors ${
                     activeSuggestion?.field === 'origin' && activeSuggestion?.index === i
-                      ? 'bg-blue-500 text-white'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
+                      ? isDark
+                        ? 'bg-[#505081] text-white'
+                        : 'bg-[#6A89A7] text-white'
+                      : isDark
+                        ? 'hover:bg-gray-600 text-white'
+                        : 'hover:bg-[#BDDFC]/30 text-[#384959]'
                   }`}
                 >
                   {s}
@@ -207,7 +220,7 @@ export default function SearchForm({ onSearch }: Props) {
 
         {/* Destination Input */}
         <div className="autocomplete-container relative z-30">
-          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">To</label>
+          <label className={`block text-xs font-semibold mb-1 ${isDark ? 'text-[#8686AC]' : 'text-white drop-shadow-sm'}`}>To</label>
           <input
             ref={destinationInputRef}
             aria-label="destination"
@@ -215,19 +228,31 @@ export default function SearchForm({ onSearch }: Props) {
             onChange={(e) => handleDestinationChange(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, 'destination', suggestions.destination)}
             placeholder="Arrival city"
-            className="w-full p-3 border-2 border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-0"
+            className={`w-full p-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
+              isDark
+                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-300 focus:border-[#88BDF2]'
+                : 'bg-white/90 border-white/60 text-[#384959] placeholder-[#6A89A7] focus:border-white focus:bg-white'
+            }`}
             autoComplete="off"
             />
           {suggestions.destination.length > 0 && (
-            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
+            <div className={`absolute top-full left-0 z-50 w-full mt-1 rounded-lg shadow-lg border ${
+              isDark
+                ? 'bg-gray-700 border-gray-600'
+                : 'bg-white border-[#BDDFC]/40'
+            }`}>
               {suggestions.destination.map((s, i) => (
                 <div
                   key={i}
                   onClick={() => selectSuggestion('destination', s)}
                   className={`px-3 py-2 cursor-pointer text-sm transition-colors ${
                     activeSuggestion?.field === 'destination' && activeSuggestion?.index === i
-                      ? 'bg-blue-500 text-white'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
+                      ? isDark
+                        ? 'bg-[#505081] text-white'
+                        : 'bg-[#6A89A7] text-white'
+                      : isDark
+                        ? 'hover:bg-gray-600 text-white'
+                        : 'hover:bg-[#BDDFC]/30 text-[#384959]'
                   }`}
                 >
                   {s}
@@ -239,7 +264,7 @@ export default function SearchForm({ onSearch }: Props) {
 
         {/* Airline Input */}
         <div className="autocomplete-container relative z-30">
-          <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Airline</label>
+          <label className={`block text-xs font-semibold mb-1 ${isDark ? 'text-[#8686AC]' : 'text-white drop-shadow-sm'}`}>Airline</label>
           <input
             ref={flightNumberInputRef}
             aria-label="flightNumber"
@@ -247,19 +272,31 @@ export default function SearchForm({ onSearch }: Props) {
             onChange={(e) => handleFlightNumberChange(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, 'flightNumber', suggestions.flightNumber)}
             placeholder="Airline code"
-            className="w-full p-3 border-2 border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-0"
+            className={`w-full p-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
+              isDark
+                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-300 focus:border-[#88BDF2]'
+                : 'bg-white/90 border-white/60 text-[#384959] placeholder-[#6A89A7] focus:border-white focus:bg-white'
+            }`}
             autoComplete="off"
           />
           {suggestions.flightNumber.length > 0 && (
-            <div className="absolute top-full left-0 z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
+            <div className={`absolute top-full left-0 z-50 w-full mt-1 rounded-lg shadow-lg border ${
+              isDark
+                ? 'bg-gray-700 border-gray-600'
+                : 'bg-white border-[#BDDFC]/40'
+            }`}>
               {suggestions.flightNumber.map((s, i) => (
                 <div
                   key={i}
                   onClick={() => selectSuggestion('flightNumber', s)}
                   className={`px-3 py-2 cursor-pointer text-sm transition-colors ${
                     activeSuggestion?.field === 'flightNumber' && activeSuggestion?.index === i
-                      ? 'bg-blue-500 text-white'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-900 dark:text-white'
+                      ? isDark
+                        ? 'bg-[#505081] text-white'
+                        : 'bg-[#6A89A7] text-white'
+                      : isDark
+                        ? 'hover:bg-gray-600 text-white'
+                        : 'hover:bg-[#BDDFC]/30 text-[#384959]'
                   }`}
                 >
                   {s}
@@ -273,20 +310,28 @@ export default function SearchForm({ onSearch }: Props) {
         <div className="flex flex-col justify-end">
           <button 
             type="submit" 
-            className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+            className={`w-full px-6 py-3 font-semibold rounded-lg transition-all duration-200 shadow-md ${
+              isDark
+                ? 'bg-[#505081] text-[#E8E8F0] hover:bg-[#8686AC] hover:shadow-lg hover:shadow-[#88BDF2]/30'
+                : 'bg-white text-[#6A89A7] hover:bg-white/95 hover:shadow-lg hover:shadow-[#6A89A7]/20 border-2 border-white font-bold active:scale-95'
+            }`}
           >
             Search Flights
           </button>
         </div>
       </div>
 
-      {error && <div className="text-sm text-red-600 dark:text-red-400">{error}</div>}
+      {error && <div className={`text-sm ${isDark ? 'text-red-400' : 'text-white drop-shadow-sm'}`}>{error}</div>}
 
       <div className="flex gap-2 pt-2">
         <button 
           type="button" 
           onClick={clearAndSearch} 
-          className="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 font-semibold transition-colors"
+          className={`px-4 py-2 border-2 font-semibold rounded-lg transition-all duration-200 ${
+            isDark
+              ? 'border-[#505081] text-[#88BDF2] hover:bg-[#272757] hover:shadow-md hover:shadow-[#88BDF2]/20'
+              : 'border-white text-white hover:bg-white/30 hover:shadow-md hover:shadow-white/30 active:scale-95'
+          }`}
         >
           View All Flights
         </button>

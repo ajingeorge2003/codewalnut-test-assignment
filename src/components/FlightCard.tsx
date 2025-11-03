@@ -7,6 +7,7 @@ type Props = {
   onSelect?: (f: Flight) => void
   onToggleWatch?: (f: Flight) => void
   isWatched?: boolean
+  isDark?: boolean
 }
 
 function statusConfig(s?: string) {
@@ -17,7 +18,7 @@ function statusConfig(s?: string) {
   return { color: 'bg-green-100 text-green-800', icon: FaCheckCircle, label: 'On Time' }
 }
 
-export default function FlightCard({ flight, onSelect, onToggleWatch, isWatched }: Props) {
+export default function FlightCard({ flight, onSelect, onToggleWatch, isWatched, isDark = false }: Props) {
   const status = statusConfig(flight.status)
   const StatusIcon = status.icon
 
@@ -28,13 +29,17 @@ export default function FlightCard({ flight, onSelect, onToggleWatch, isWatched 
   }
 
   return (
-    <div className="flight-card animate-fade-in p-3 rounded-lg shadow-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+    <div className={`flight-card animate-fade-in p-3 rounded-lg shadow-md border transition-all ${
+      isDark 
+        ? 'bg-[#272757] border-[#505081] hover:border-[#88BDF2]' 
+        : 'bg-white/80 backdrop-blur-sm border-[#BDDFC]/50 hover:border-[#88BDF2]/80 shadow-md hover:shadow-lg'
+    }`}>
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2 flex-1">
-          <FaPlane className="text-blue-600 text-lg" />
+          <FaPlane className={`text-lg ${isDark ? 'text-[#88BDF2]' : 'text-[#6A89A7]'}`} />
           <div>
-            <div className="font-bold text-base text-gray-900 dark:text-white">{flight.flightNumber}</div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">{flight.airline}</div>
+            <div className={`font-bold text-base ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>{flight.flightNumber}</div>
+            <div className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>{flight.airline}</div>
           </div>
         </div>
         <div className={`px-2 py-0.5 rounded-full text-xs font-semibold flex items-center gap-1 ${status.color}`}>
@@ -43,41 +48,41 @@ export default function FlightCard({ flight, onSelect, onToggleWatch, isWatched 
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
+      <div className={`grid grid-cols-3 gap-2 mb-2 pb-2 border-b ${isDark ? 'border-[#505081]' : 'border-[#BDDFC]/40'}`}>
         {/* From */}
         <div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">From</div>
-          <div className="font-bold text-base text-gray-900 dark:text-white">{flight.origin?.code || '—'}</div>
-          <div className="text-xs text-gray-600 dark:text-gray-400">{flight.origin?.city || ''}</div>
+          <div className={`text-xs uppercase font-semibold ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>From</div>
+          <div className={`font-bold text-base ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>{flight.origin?.code || '—'}</div>
+          <div className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#88BDF2]/70'}`}>{flight.origin?.city || ''}</div>
         </div>
 
         {/* Arrow & Duration */}
         <div className="flex flex-col items-center justify-center">
-          <FaPlane className="text-gray-400 rotate-90 mb-0.5 text-sm" />
-          <div className="text-xs text-gray-500">{flight.duration || '—'}</div>
+          <FaPlane className={`rotate-90 mb-0.5 text-sm ${isDark ? 'text-[#505081]' : 'text-[#BDDFC]/60'}`} />
+          <div className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>{flight.duration || '—'}</div>
         </div>
 
         {/* To */}
         <div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">To</div>
-          <div className="font-bold text-base text-gray-900 dark:text-white">{flight.destination?.code || '—'}</div>
-          <div className="text-xs text-gray-600 dark:text-gray-400">{flight.destination?.city || ''}</div>
+          <div className={`text-xs uppercase font-semibold ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>To</div>
+          <div className={`font-bold text-base ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>{flight.destination?.code || '—'}</div>
+          <div className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#88BDF2]/70'}`}>{flight.destination?.city || ''}</div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 mb-2 text-xs">
         <div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Departure</div>
-          <div className="font-semibold text-gray-900 dark:text-white">{formatTime(flight.departure?.scheduled)}</div>
+          <div className={`text-xs uppercase font-semibold ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>Departure</div>
+          <div className={`font-semibold ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>{formatTime(flight.departure?.scheduled)}</div>
           {flight.departure?.actual && (
-            <div className="text-xs text-gray-600 dark:text-gray-400">Actual: {formatTime(flight.departure.actual)}</div>
+            <div className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#88BDF2]/70'}`}>Actual: {formatTime(flight.departure.actual)}</div>
           )}
         </div>
         <div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold">Arrival</div>
-          <div className="font-semibold text-gray-900 dark:text-white">{formatTime(flight.arrival?.scheduled)}</div>
+          <div className={`text-xs uppercase font-semibold ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>Arrival</div>
+          <div className={`font-semibold ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>{formatTime(flight.arrival?.scheduled)}</div>
           {flight.arrival?.estimated && (
-            <div className="text-xs text-gray-600 dark:text-gray-400">Est: {formatTime(flight.arrival.estimated)}</div>
+            <div className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#88BDF2]/70'}`}>Est: {formatTime(flight.arrival.estimated)}</div>
           )}
         </div>
       </div>
@@ -85,16 +90,24 @@ export default function FlightCard({ flight, onSelect, onToggleWatch, isWatched 
       <div className="flex gap-2">
         <button
           onClick={() => onSelect?.(flight)}
-          className="flex-1 px-2 py-1 rounded border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 text-xs font-semibold transition-colors"
+          className={`flex-1 px-2 py-1 rounded border text-xs font-semibold transition-all duration-200 ${
+            isDark
+              ? 'border-[#505081] text-[#88BDF2] hover:bg-[#505081]/40 hover:shadow-md hover:shadow-[#88BDF2]/20 active:scale-95'
+              : 'border-[#6A89A7] text-[#6A89A7] hover:bg-[#BDDFC]/50 hover:shadow-md hover:shadow-[#6A89A7]/20 active:scale-95'
+          }`}
         >
           Details
         </button>
         <button
           onClick={() => onToggleWatch?.(flight)}
-          className={`flex-1 px-2 py-1 rounded text-xs font-semibold transition-colors flex items-center justify-center gap-1 ${
+          className={`flex-1 px-2 py-1 rounded text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-1 ${
             isWatched
-              ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600'
+              ? isDark
+                ? 'bg-[#505081]/70 text-[#88BDF2] hover:bg-[#505081]/90 hover:shadow-md hover:shadow-[#88BDF2]/20 active:scale-95'
+                : 'bg-[#88BDF2]/40 text-[#6A89A7] border border-[#88BDF2]/60 hover:bg-[#88BDF2]/60 hover:shadow-md hover:shadow-[#88BDF2]/30 active:scale-95'
+              : isDark
+                ? 'bg-[#1A1A2E] text-[#8686AC] hover:bg-[#272757] hover:shadow-md hover:shadow-[#88BDF2]/10 active:scale-95'
+                : 'bg-[#BDDFC]/40 text-[#6A89A7] hover:bg-[#BDDFC]/60 border border-[#BDDFC]/60 hover:shadow-md hover:shadow-[#BDDFC]/30 active:scale-95'
           }`}
         >
           {isWatched ? <FaHeart size={12} /> : <FaRegHeart size={12} />}

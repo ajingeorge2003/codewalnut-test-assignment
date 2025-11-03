@@ -7,7 +7,11 @@ import { useWatchlist } from '../context/WatchlistContext'
 
 const ITEMS_PER_PAGE = 10
 
-export default function Home() {
+interface HomeProps {
+  isDark?: boolean
+}
+
+export default function Home({ isDark = false }: HomeProps) {
   const [results, setResults] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -94,9 +98,12 @@ export default function Home() {
   return (
     <div className="space-y-4">
       {/* Search Section with better styling */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 p-6 rounded-xl shadow-lg border-0">
-        <h2 className="text-2xl font-bold text-white mb-4">Find Your Flight</h2>
-        <SearchForm onSearch={onSearch} />
+      <section className={`p-6 rounded-xl shadow-lg border-0 ${isDark 
+        ? 'bg-gradient-to-r from-[#505081] to-[#272757]' 
+        : 'bg-gradient-to-br from-[#6A89A7]/70 to-[#88BDF2]/60 shadow-xl'
+      }`}>
+        <h2 className={`text-2xl font-bold ${isDark ? 'text-[#88BDF2]' : 'text-white drop-shadow'} mb-4`}>Find Your Flight</h2>
+        <SearchForm onSearch={onSearch} isDark={isDark} />
       </section>
 
       {/* Results Section */}
@@ -105,10 +112,10 @@ export default function Home() {
         <div className="lg:col-span-3">
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h2 className={`text-2xl font-bold ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>
                 Available Flights
                 {!loading && results.length > 0 && (
-                  <span className="ml-3 text-lg font-normal text-blue-600">({results.length})</span>
+                  <span className={`ml-3 text-lg font-normal ${isDark ? 'text-[#88BDF2]' : 'text-[#6A89A7]'}`}>({results.length})</span>
                 )}
               </h2>
             </div>
@@ -118,24 +125,24 @@ export default function Home() {
               {loading && (
                 <div className="space-y-2">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="p-3 rounded-lg bg-gray-200 dark:bg-gray-700 h-24 animate-pulse"></div>
+                    <div key={i} className={`p-3 rounded-lg ${isDark ? 'bg-[#505081]' : 'bg-gradient-to-r from-[#BDDFC]/40 to-[#88BDF2]/30'} h-24 animate-pulse`}></div>
                   ))}
                 </div>
               )}
 
               {/* Error State */}
               {error && !loading && (
-                <div className="p-3 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg">
-                  <div className="text-red-800 dark:text-red-200 font-semibold text-xs">Error</div>
-                  <div className="text-red-700 dark:text-red-300 text-xs">{error}</div>
+                <div className={`p-3 border rounded-lg ${isDark ? 'bg-[#3E2D5C] border-[#505081]' : 'bg-[#BDDFC]/20 border-[#6A89A7]/40'}`}>
+                  <div className={`font-semibold text-xs ${isDark ? 'text-[#88BDF2]' : 'text-[#6A89A7]'}`}>Error</div>
+                  <div className={`text-xs ${isDark ? 'text-[#BDDFC]' : 'text-[#384959]'}`}>{error}</div>
                 </div>
               )}
 
               {/* Empty State */}
               {!loading && !error && results.length === 0 && (
-                <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center">
-                  <div className="text-gray-600 dark:text-gray-400 text-xs">No flights found</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">Try a different search or click "View All Flights"</div>
+                <div className={`p-3 rounded-lg border-2 border-dashed ${isDark ? 'bg-[#1A1A2E] border-[#505081]' : 'bg-gradient-to-r from-[#BDDFC]/20 to-[#88BDF2]/15 border-[#BDDFC]/50'} text-center`}>
+                  <div className={`text-xs ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>No flights found</div>
+                  <div className={`text-xs mt-1 ${isDark ? 'text-[#505081]' : 'text-[#88BDF2]/60'}`}>Try a different search or click "View All Flights"</div>
                 </div>
               )}
 
@@ -149,7 +156,7 @@ export default function Home() {
                         onClick={() => setSelected(f)}
                         className={`cursor-pointer transition-all ${
                           selected?.id === f.id
-                            ? 'ring-2 ring-blue-500 scale-100'
+                            ? isDark ? 'ring-2 ring-[#88BDF2] scale-100' : 'ring-2 ring-blue-500 scale-100'
                             : 'hover:scale-101'
                         }`}
                       >
@@ -158,6 +165,7 @@ export default function Home() {
                           onSelect={(fl) => setSelected(fl)} 
                           onToggleWatch={(fl) => toggle(fl)}
                           isWatched={watchlist.some(w => w.id === f.id)}
+                          isDark={isDark}
                         />
                       </div>
                     ))}
@@ -165,11 +173,14 @@ export default function Home() {
 
                   {/* Pagination Controls */}
                   {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <div className={`flex items-center justify-center gap-2 mt-3 pt-3 border-t ${isDark ? 'border-[#505081]' : 'border-[#BDDFC]/40'}`}>
                       <button
                         onClick={() => goToPage(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className={`px-2 py-1 text-xs rounded border transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${isDark 
+                          ? 'border-[#505081] text-[#8686AC] hover:bg-[#272757]' 
+                          : 'border-[#BDDFC]/60 text-[#6A89A7] hover:bg-[#BDDFC]/40 hover:border-[#88BDF2]'
+                        }`}
                       >
                         Prev
                       </button>
@@ -181,8 +192,8 @@ export default function Home() {
                             onClick={() => goToPage(page)}
                             className={`w-7 h-7 text-xs rounded transition-colors ${
                               currentPage === page
-                                ? 'bg-blue-600 text-white'
-                                : 'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                ? isDark ? 'bg-[#505081] text-[#E8E8F0]' : 'bg-gradient-to-r from-[#6A89A7] to-[#88BDF2] text-white'
+                                : isDark ? 'border border-[#505081] text-[#8686AC] hover:bg-[#272757]' : 'border border-[#BDDFC]/60 text-[#6A89A7] hover:bg-[#BDDFC]/40'
                             }`}
                           >
                             {page}
@@ -193,7 +204,10 @@ export default function Home() {
                       <button
                         onClick={() => goToPage(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className={`px-2 py-1 text-xs rounded border transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${isDark 
+                          ? 'border-[#505081] text-[#8686AC] hover:bg-[#272757]' 
+                          : 'border-[#BDDFC]/60 text-[#6A89A7] hover:bg-[#BDDFC]/40 hover:border-[#88BDF2]'
+                        }`}
                       >
                         Next
                       </button>
@@ -201,7 +215,7 @@ export default function Home() {
                   )}
 
                   {/* Page Info */}
-                  <div className="text-center text-xs text-gray-600 dark:text-gray-400 mt-2">
+                  <div className={`text-center text-xs mt-2 ${isDark ? 'text-[#8686AC]' : 'text-[#88BDF2]/70'}`}>
                     Page {currentPage}/{totalPages} • {paginatedResults.length}/{results.length}
                   </div>
                 </>
@@ -213,25 +227,34 @@ export default function Home() {
         {/* Right: Flight Details Panel */}
         <div className="lg:col-span-2">
           {selected ? (
-            <section className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 sticky top-0 max-h-screen overflow-y-auto">
-              <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">Flight Details</h3>
+            <section className={`p-4 rounded-xl shadow-md border ${isDark 
+              ? 'bg-[#272757] border-[#505081]' 
+              : 'bg-white/80 backdrop-blur-sm border-[#BDDFC]/50 shadow-lg'
+            } sticky top-0 max-h-screen overflow-y-auto`}>
+              <div className={`flex items-center justify-between mb-3 pb-3 border-b ${isDark ? 'border-[#505081]' : 'border-[#BDDFC]/40'}`}>
+                <h3 className={`text-lg font-bold truncate ${isDark ? 'text-[#E8E8F0]' : 'text-[#384959]'}`}>Flight Details</h3>
                 <button 
                   onClick={() => setSelected(null)}
-                  className="flex-shrink-0 px-2 py-0.5 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className={`flex-shrink-0 px-2 py-0.5 text-sm rounded transition-colors ${isDark 
+                    ? 'text-[#8686AC] hover:text-[#88BDF2] bg-[#1A1A2E] hover:bg-[#505081]' 
+                    : 'text-[#6A89A7] hover:text-[#384959] bg-[#BDDFC]/40 hover:bg-[#BDDFC]/60 border border-[#BDDFC]/50'
+                  }`}
                 >
                   ✕
                 </button>
               </div>
               <div className="text-sm">
-                <FlightDetails flight={selected} />
+                <FlightDetails flight={selected} isDark={isDark} />
               </div>
             </section>
           ) : (
-            <div className="bg-blue-50 dark:bg-gray-800 p-4 rounded-xl border-2 border-dashed border-blue-300 dark:border-gray-600 text-center h-28 flex items-center justify-center">
+            <div className={`p-4 rounded-xl border-2 border-dashed text-center h-28 flex items-center justify-center ${isDark 
+              ? 'bg-[#1A1A2E] border-[#505081]' 
+              : 'bg-gradient-to-br from-[#BDDFC]/30 to-[#88BDF2]/20 border-[#BDDFC]/50'
+            }`}>
               <div>
-                <div className="text-3xl text-blue-400 mb-2">✈️</div>
-                <div className="text-sm text-gray-700 dark:text-gray-300 font-semibold">Select a flight to view details</div>
+                <div className={`text-3xl mb-2 ${isDark ? 'text-[#88BDF2]' : 'text-[#88BDF2]'}`}>✈️</div>
+                <div className={`text-sm font-semibold ${isDark ? 'text-[#8686AC]' : 'text-[#6A89A7]'}`}>Select a flight to view details</div>
               </div>
             </div>
           )}
