@@ -97,13 +97,21 @@ export default function FlightDetails({ flight, isDark = false }: Props) {
         </div>
 
         {/* Delay Information */}
-        {flight.delay && flight.delay > 0 && (
+        {flight.delay && flight.delay > 0 ? (
           <div className={`p-3 rounded-lg border ${isDark ? 'bg-[#3E2D5C] border-[#505081]' : 'bg-yellow-50 border-yellow-200'}`}>
             <div className="flex items-center gap-2 mb-1">
               <FaClock className={isDark ? 'text-[#88BDF2]' : 'text-yellow-600'} size={12} />
               <span className={`text-xs font-semibold uppercase ${isDark ? 'text-[#88BDF2]' : 'text-yellow-600'}`}>Delay</span>
             </div>
             <p className={`text-sm font-semibold ${isDark ? 'text-[#BDDFC]' : 'text-yellow-900'}`}>{flight.delay} minutes</p>
+          </div>
+        ) : (
+          <div className={`p-3 rounded-lg border ${isDark ? 'bg-[#2D4A3E] border-[#505081]' : 'bg-green-50 border-green-200'}`}>
+            <div className="flex items-center gap-2 mb-1">
+              <FaClock className={isDark ? 'text-[#88BDF2]' : 'text-green-600'} size={12} />
+              <span className={`text-xs font-semibold uppercase ${isDark ? 'text-[#88BDF2]' : 'text-green-600'}`}>Delay</span>
+            </div>
+            <p className={`text-sm font-semibold ${isDark ? 'text-[#BDDFC]' : 'text-green-700'}`}>On Schedule</p>
           </div>
         )}
 
