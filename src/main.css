@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+html, body, #root {
+  height: 100%;
+}
+
+.container {
+  @apply mx-auto px-4 max-w-5xl;
+}
+
+/* Smooth transitions */
+* {
+  transition-duration: 200ms;
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Loading skeleton pulse */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-pulse {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(
+    to right,
+    rgb(243, 244, 246),
+    rgb(229, 231, 235),
+    rgb(243, 244, 246)
+  );
+  background-size: 1000px 100%;
+}
+
+/* Hover effects for interactive elements */
+button {
+  transition: transform 100ms ease-in-out;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Flight card hover effect */
+.flight-card {
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flight-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
+}
+
+/* Smooth fade for dynamic content */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in-fast {
+  animation: fadeIn 0.15s ease-out;
+}
