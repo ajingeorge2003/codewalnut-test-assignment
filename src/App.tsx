@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { FaPlane, FaHeart, FaSun, FaMoon } from 'react-icons/fa'
+import { Analytics } from '@vercel/analytics/react'
 import HomePage from './pages/HomePage'
 import Home from './pages/Home'
 import WatchlistPage from './pages/WatchlistPage'
@@ -189,6 +190,7 @@ export default function App() {
   return (
     <WatchlistProvider>
       <AppContent />
+      <Analytics />
     </WatchlistProvider>
   )
 }
